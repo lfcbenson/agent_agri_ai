@@ -1,0 +1,84 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Disease Knowledge Base API",
+    "version": "1.0.0",
+    "description": "Query disease knowledge base to find diseases matching crop and environmental conditions"
+  },
+  "paths": {
+    "/query-diseases": {
+      "post": {
+        "summary": "Query diseases by crop and conditions",
+        "description": "Search disease knowledge base for diseases that match the specified crop type and environmental conditions (temperature, humidity). Returns diseases ranked by how well conditions match their optimal growth parameters.",
+        "operationId": "queryDiseases",
+        "parameters": [
+          {
+            "name": "crop_type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["corn", "soybeans", "wheat"]
+            },
+            "description": "Type of crop to query diseases for"
+          },
+          {
+            "name": "temperature",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            },
+            "description": "Current average temperature in Fahrenheit"
+          },
+          {
+            "name": "humidity",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "number"
+            },
+            "description": "Current average humidity percentage (0-100)"
+          },
+          {
+            "name": "symptoms",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of observed symptoms (e.g., 'ndvi_decline,leaf_discoloration')"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of matching diseases",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "matching_diseases": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "disease_id": {"type": "string"},
+                          "name": {"type": "string"},
+                          "match_score": {"type": "number"},
+                          "treatment": {"type": "string"},
+                          "cost_per_acre": {"type": "number"}
+                        }
+                      }
+                    },
+                    "total_matches": {"type": "integer"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

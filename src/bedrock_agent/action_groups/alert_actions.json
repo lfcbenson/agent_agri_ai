@@ -1,0 +1,66 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Alert Notification API",
+    "version": "1.0.0",
+    "description": "API for sending disease alerts to farmers via SMS and Email"
+  },
+  "paths": {
+    "/send-alert": {
+      "post": {
+        "summary": "Send alert notification to farmer",
+        "description": "Sends SMS and email alerts to farmer when disease outbreak probability exceeds threshold. Includes disease information, severity level, treatment recommendations, and financial impact.",
+        "operationId": "sendAlert",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["farm_id", "message", "severity"],
+                "properties": {
+                  "farm_id": {
+                    "type": "string",
+                    "description": "Unique identifier for the farm"
+                  },
+                  "field_id": {
+                    "type": "string",
+                    "description": "Specific field identifier (optional)"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "Alert message text"
+                  },
+                  "severity": {
+                    "type": "string",
+                    "enum": ["LOW", "MODERATE", "HIGH", "CRITICAL"],
+                    "description": "Alert severity level"
+                  },
+                  "disease_info": {
+                    "type": "object",
+                    "properties": {
+                      "disease_name": {"type": "string"},
+                      "probability": {"type": "number"},
+                      "affected_acres": {"type": "number"},
+                      "treatment_recommendation": {"type": "string"},
+                      "estimated_cost": {"type": "number"},
+                      "potential_loss": {"type": "number"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Alert sent successfully"
+          },
+          "400": {
+            "description": "Invalid request"
+          }
+        }
+      }
+    }
+  }
+}

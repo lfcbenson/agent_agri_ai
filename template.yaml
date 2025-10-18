@@ -1,0 +1,123 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Agent Agri AI - Bedrock Agent action Lambdas and daily orchestrator
+
+Parameters:
+  AgentId:
+    Type: String
+    Default: ''
+    Description: Bedrock Agent ID for the daily orchestrator
+  AgentAliasId:
+    Type: String
+    Default: ''
+    Description: Bedrock Agent Alias ID for the daily orchestrator
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 180
+    MemorySize: 512
+    Architectures:
+      - x86_64
+
+Resources:
+  WeatherFetcherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/weather_fetcher
+      Handler: lambda_function.lambda_handler
+      Description: Fetches weather and returns disease-relevant metrics
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: FarmRegistry
+        - Statement:
+            - Effect: Allow
+              Action:
+                - secretsmanager:GetSecretValue
+                - secretsmanager:DescribeSecret
+              Resource: '*'
+      Runtime: python3.12
+      Layers:
+        - AWSSDKPandas-Python312
+      MemorySize: 3008
+      Timeout: 300
+      Environment: {}
+
+  SatelliteFetcherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/satellite_fetcher
+      Handler: lambda_function.lambda_handler
+      Description: Fetches NDVI data and computes anomalies
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: FarmRegistry
+      Runtime: python3.12
+      Layers:
+        - AWSSDKPandas-Python312
+      MemorySize: 3008
+      Timeout: 300
+      Environment: {}
+
+  PestDataFetcherFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/pest_data_fetcher
+      Handler: lambda_function.lambda_handler
+      Description: Queries pest/disease KB in DynamoDB and scores matches
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: PestDiseaseKB
+
+  AlertSenderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/alert_sender
+      Handler: lambda_function.lambda_handler
+      Description: Sends alerts via SES and logs to AlertHistory
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: AlertHistory
+        - DynamoDBReadPolicy:
+            TableName: FarmRegistry
+        - Statement:
+            - Effect: Allow
+              Action:
+                - ses:SendEmail
+              Resource: '*'
+
+  DailyOrchestratorFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/lambdas/daily_orchestrator
+      Handler: lambda_function.lambda_handler
+      Description: Triggers daily and invokes Bedrock Agent per farm/field
+      Environment:
+        Variables:
+          AGENT_ID: !Ref AgentId
+          AGENT_ALIAS_ID: !Ref AgentAliasId
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: FarmRegistry
+        - Statement:
+            - Effect: Allow
+              Action:
+                - bedrock:InvokeAgent
+              Resource: '*'
+      Events:
+        DailySchedule:
+          Type: Schedule
+          Properties:
+            Schedule: cron(0 6 * * ? *)
+
+Outputs:
+  WeatherFetcherArn:
+    Value: !GetAtt WeatherFetcherFunction.Arn
+  SatelliteFetcherArn:
+    Value: !GetAtt SatelliteFetcherFunction.Arn
+  PestDataFetcherArn:
+    Value: !GetAtt PestDataFetcherFunction.Arn
+  AlertSenderArn:
+    Value: !GetAtt AlertSenderFunction.Arn
+  DailyOrchestratorArn:
+    Value: !GetAtt DailyOrchestratorFunction.Arn

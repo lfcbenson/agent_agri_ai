@@ -1,0 +1,42 @@
+{
+     "openapi": "3.0.0",
+     "info": {
+       "title": "Weather Data API",
+       "version": "1.0.0"
+     },
+     "paths": {
+       "/get-weather": {
+         "post": {
+           "summary": "Get weather forecast",
+           "description": "Retrieves weather forecast data for a specific farm",
+           "operationId": "getWeatherForecast",
+           "parameters": [
+             {
+               "name": "farm_id",
+               "in": "query",
+               "required": true,
+               "description": "Unique identifier for the farm",
+               "schema": {"type": "string"}
+             }
+           ],
+           "responses": {
+             "200": {
+               "description": "Weather forecast retrieved",
+               "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "farm_id": {"type": "string"},
+                    "daily_forecast": {"type": "array"},
+                    "summary_7day": {"type": "object"}
+                  }
+                }
+              }
+             }
+           }
+         }
+       }
+     }
+   }
+  }

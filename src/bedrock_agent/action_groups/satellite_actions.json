@@ -1,0 +1,37 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Satellite Data API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/fetch-satellite": {
+      "post": {
+        "summary": "Fetch NDVI satellite data",
+        "description": "Retrieves Normalized Difference Vegetation Index (NDVI) satellite imagery data for a specific farm field",
+        "operationId": "fetchSatelliteData",
+        "parameters": [
+          {
+            "name": "farm_id",
+            "in": "query",
+            "required": true,
+            "description": "Unique identifier for the farm",
+            "schema": {"type": "string"}
+          },
+          {
+            "name": "field_id",
+            "in": "query",
+            "required": true,
+            "description": "Unique identifier for the field within the farm",
+            "schema": {"type": "string"}
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "NDVI data retrieved successfully"
+          }
+        }
+      }
+    }
+  }
+}

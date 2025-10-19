@@ -92,13 +92,11 @@ def parse_bedrock_parameters(event):
         for param in parameters:
             name = param.get('name')
             value = param.get('value')
-            
-            # Handle nested structure: {'name': 'x', 'type': 'string', 'value': 'y'}
+            }
             if value is None and 'type' in param:
                 value = param.get('value')
             
             if name and value is not None:
-                # Handle disease_info JSON object
                 if name == 'disease_info':
                     if isinstance(value, str):
                         try:
@@ -113,7 +111,6 @@ def parse_bedrock_parameters(event):
                 
                 logger.debug(f"Extracted from parameters: {name} = {value}")
     
-    # Log final parsed parameters
     logger.info(f"Final parsed parameters: {list(param_dict.keys())}")
     for key, value in param_dict.items():
         if key != 'disease_info':  # Don't log large nested objects
@@ -150,7 +147,7 @@ def lambda_handler(event, context):
             logger.error(f"Missing required parameters: farm_id={farm_id}, message={message}, severity={severity}")
             return error_response(f"Missing required parameters. Got: farm_id={farm_id}, message={bool(message)}, severity={severity}")
         
-        # Extract optional parameters
+        
         field_id = param_dict.get('field_id')
         disease_info = param_dict.get('disease_info')
         

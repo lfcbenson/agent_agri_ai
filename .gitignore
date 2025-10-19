@@ -1,5 +1,6 @@
 # Virtual Environment
 aws_agent_venv/
+.env
 
 # Python
 __pycache__/
@@ -113,3 +114,5 @@ logs/
 
 # Zip files
 *.zip
+
+src/lambdas/**/package/

@@ -11,7 +11,7 @@ import time
 # Configure logging for Lambda
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-config = Config(connect_timeout=10, read_timeout=300, retries={'max_attempts': 1})
+config = Config(connect_timeout=10, read_timeout=300, retries={'max_attempts': 0})
 
 # Create formatter
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')

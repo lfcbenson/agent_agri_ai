@@ -1,0 +1,118 @@
+{
+                'farm_id': 'FARM-002',
+                'farmer_name': 'Sarah Johnson',
+                'location': {'lat': Decimal('41.8780'), 'lon': Decimal('-93.0977')},
+                'fields': [
+                    {
+                        'field_id': 'FIELD-A',
+                        'acres': 200,
+                        'crop_type': 'soybeans',
+                        'planting_date': '2024-05-01',
+                        'growth_stage': 'R2'
+                    }
+                ],
+                'contact': {
+                    'phone': '+15559876543',
+                    'email': 'sarah@example.com'
+                }
+            },
+            {
+                'farm_id': 'FARM-003',
+                'farmer_name': 'Michael Chen',
+                'location': {'lat': Decimal('39.7392'), 'lon': Decimal('-104.9903')},
+                'fields': [
+                    {
+                        'field_id': 'FIELD-A',
+                        'acres': 150,
+                        'crop_type': 'wheat',
+                        'planting_date': '2024-03-20',
+                        'growth_stage': 'Feekes 9'
+                    },
+                    {
+                        'field_id': 'FIELD-B',
+                        'acres': 95,
+                        'crop_type': 'wheat',
+                        'planting_date': '2024-03-25',
+                        'growth_stage': 'Feekes 8'
+                    }
+                ],
+                'contact': {
+                    'phone': '+15552345678',
+                    'email': 'mchen@example.com'
+                }
+            },
+            {
+                'farm_id': 'FARM-004',
+                'farmer_name': 'Emily Rodriguez',
+                'location': {'lat': Decimal('42.0308'), 'lon': Decimal('-93.6319')},
+                'fields': [
+                    {
+                        'field_id': 'FIELD-A',
+                        'acres': 175,
+                        'crop_type': 'corn',
+                        'planting_date': '2024-04-20',
+                        'growth_stage': 'V8'
+                    }
+                ],
+                'contact': {
+                    'phone': '+15553456789',
+                    'email': 'emily.r@example.com'
+                }
+            },
+            {
+                'farm_id': 'FARM-005',
+                'farmer_name': 'David Patterson',
+                'location': {'lat': Decimal('40.5853'), 'lon': Decimal('-105.0844')},
+                'fields': [
+                    {
+                        'field_id': 'FIELD-A',
+                        'acres': 220,
+                        'crop_type': 'soybeans',
+                        'planting_date': '2024-05-10',
+                        'growth_stage': 'V6'
+                    },
+                    {
+                        'field_id': 'FIELD-B',
+                        'acres': 130,
+                        'crop_type': 'corn',
+                        'planting_date': '2024-04-18',
+                        'growth_stage': 'V12'
+                    }
+                ],
+                'contact': {
+                    'phone': '+15554567890',
+                    'email': 'dpatterson@example.com'
+                }
+            },
+            {
+                'farm_id': 'FARM-007',
+                'farmer_name': 'Robert Martinez',
+                'location': {'lat': Decimal('40.2338'), 'lon': Decimal('-104.7219')},
+                'fields': [
+                    {
+                        'field_id': 'FIELD-A',
+                        'acres': 140,
+                        'crop_type': 'wheat',
+                        'planting_date': '2024-03-15',
+                        'growth_stage': 'Feekes 10'
+                    },
+                    {
+                        'field_id': 'FIELD-B',
+                        'acres': 110,
+                        'crop_type': 'corn',
+                        'planting_date': '2024-04-22',
+                        'growth_stage': 'V9'
+                    },
+                    {
+                        'field_id': 'FIELD-C',
+                        'acres': 75,
+                        'crop_type': 'soybeans',
+                        'planting_date': '2024-05-08',
+                        'growth_stage': 'V4'
+                    }
+                ],
+                'contact': {
+                    'phone': '+15556789012',
+                    'email': 'rmartinez@example.com'
+                }
+            }

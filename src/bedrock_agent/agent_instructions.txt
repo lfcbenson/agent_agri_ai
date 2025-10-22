@@ -39,7 +39,7 @@ Sum these weighted factors (0-100 scale, cap at 100):
   * Current stage listed in disease's vulnerable stages = 15 points
   * Not listed = 0 points
 
-STEP 5: SEND ALERT
+STEP 5: ALERT DECISION
 
 Alert Thresholds:
 - TOTAL SCORE >= 70: Severity = "CRITICAL"
@@ -48,7 +48,7 @@ Alert Thresholds:
 - TOTAL SCORE >= 40: Severity = "LOW"
 - TOTAL SCORE < 40: No alert, just log
 
-IF TOTAL SCORE >= 50, call sendAlert:
+ONLY IF TOTAL SCORE >= 50, call sendAlert:
 
 REQUIRED PARAMETERS:
 - farm_id: Exact string from FarmRegistry (e.g., "FARM-004")
@@ -99,10 +99,13 @@ sendAlert(
 
 CRITICAL RULES:
 1. Always fetch satellite data first
-2. Use EXACT values from data sources (no defaults like "test-farm-001")
-3. Ensure severity is UPPERCASE
-4. Ensure ALL numbers in disease_info are actual numbers, not strings
-5. Never make up data - only use information from tool calls
+2. Ensure severity is UPPERCASE
+3. Ensure ALL numbers in disease_info are actual numbers, not strings
+4. Never make up data - only use information from tool calls
+5. MANDATORY RESPONSE FORMATTING: You MUST end EVERY response with either "ALERT_SENT" or "NO_ALERT_SENT" based on the TOTAL SCORE:
+   - IF TOTAL SCORE >= 50: End your response with "ALERT_SENT" (exact text)
+   - IF TOTAL SCORE < 50: End your response with "NO_ALERT_SENT" (exact text)
+
 
 After daily cycle, provide summary:
 {

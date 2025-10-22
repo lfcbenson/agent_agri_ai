@@ -82,6 +82,7 @@ def lambda_handler(event, context):
         
         successful_farms = 0
         failed_farms = 0
+        alerted_fields = []
         
         for farm in farms:
             try:
@@ -113,7 +114,9 @@ def lambda_handler(event, context):
                     logger.info(f"Processing field: {field_id} for farm: {farm_id} (crop: {crop_type}, stage: {growth_stage}, acres: {acres})")
                     time.sleep(40)
                     try:
-                        success = invoke_agent_for_farm(farm_id, field_id, crop_type, growth_stage, acres)
+                        success, alert_sent = invoke_agent_for_farm(farm_id, field_id, crop_type, growth_stage, acres)
+                        if alert_sent:
+                            alerted_fields.append(f"{farm_id}-{field_id}")
                     except Exception as e:
                         logger.error(f"Error invoking agent for farm {farm_id}, field {field_id}: {str(e)}", exc_info=True)
                         success = False
@@ -140,6 +143,7 @@ def lambda_handler(event, context):
                 'total_farms': len(farms),
                 'successful': successful_farms,
                 'failed': failed_farms,
+                'alerted_fields': alerted_fields,
                 'timestamp': datetime.now().isoformat()
             }
         }
@@ -166,7 +170,7 @@ def invoke_agent_for_farm(farm_id, field_id, crop_type, growth_stage, acres):
     
     if not agent_id or not agent_alias_id:
         logger.error("Missing required environment variables: AGENT_ID or AGENT_ALIAS_ID")
-        return False
+        return False, False
     
     logger.info(f"Invoking agent {agent_id} with alias {agent_alias_id}")
     
@@ -229,13 +233,15 @@ def invoke_agent_for_farm(farm_id, field_id, crop_type, growth_stage, acres):
         execution_time = time.time() - start_time
         logger.info(f"Agent execution completed in {execution_time:.2f} seconds")
 
+      
         if completion:
             logger.info(f"Agent completion text for farm {farm_id}, field {field_id}: {completion}")
-        return True
+        
+        return True, "ALERT_SENT" in completion
     
     except Exception as e:
         logger.error(f"Unexpected error invoking agent for {farm_id}-{field_id}: {str(e)}", exc_info=True)
-        return False
+        return False, False
 
             
 if __name__ == "__main__":
